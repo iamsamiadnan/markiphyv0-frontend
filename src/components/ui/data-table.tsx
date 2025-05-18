@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({
     return (
         <>
             <Table>
-                <TableHeader className="sticky top-0 bg-[var(--mkp-background)] ">
+                <TableHeader>
                     <TableRow>
                         <TableHead className="px-0" colSpan={5}>
                             <div className="flex gap-6 justify-between pb-4">
@@ -98,27 +98,29 @@ export function DataTable<TData, TValue>({
                             </div>
                         </TableHead>
                     </TableRow>
-                    {table.getHeaderGroups().map((headerGroup) => (
-                        <TableRow key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => {
-                                return (
-                                    <TableHead key={header.id}>
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(
-                                                  header.column.columnDef
-                                                      .header,
-                                                  header.getContext()
-                                              )}
-                                    </TableHead>
-                                );
-                            })}
-                        </TableRow>
-                    ))}
                 </TableHeader>
             </Table>
             <div className="h-[400px] overflow-y-scroll border border-[var(--mkp-primary)]">
                 <Table>
+                    <TableHeader className="sticky top-0 bg-[var(--mkp-background)] drop-shadow-xs">
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <TableRow key={headerGroup.id}>
+                                {headerGroup.headers.map((header) => {
+                                    return (
+                                        <TableHead key={header.id}>
+                                            {header.isPlaceholder
+                                                ? null
+                                                : flexRender(
+                                                      header.column.columnDef
+                                                          .header,
+                                                      header.getContext()
+                                                  )}
+                                        </TableHead>
+                                    );
+                                })}
+                            </TableRow>
+                        ))}
+                    </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (

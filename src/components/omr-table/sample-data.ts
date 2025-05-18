@@ -2,8 +2,8 @@ import { Omr } from "./omr.type";
 
 
 export const omrs: Omr[] = [
-    { id: "1", imageUrl: "Image_001", roll: "1000001", marks: 98, status: "DONE", isRechecked: false },
-    { id: "2", imageUrl: "Image_002", roll: "1000002", marks: 92, status: "DONE", isRechecked: false },
+    { id: "1", imageUrl: "Image_001", roll: "1000001", marks: 98, status: "DONE", isRechecked: true },
+    { id: "2", imageUrl: "Image_002", roll: "1000002", marks: 92, status: "DONE", isRechecked: true },
     { id: "3", imageUrl: "Image_003", roll: "1000003", marks: 0, status: "PENDING", isRechecked: false },
     { id: "4", imageUrl: "Image_004", roll: "1000004", marks: 0, status: "FAILED", isRechecked: false },
     { id: "5", imageUrl: "Image_005", roll: "1000005", marks: 80, status: "DONE", isRechecked: false },

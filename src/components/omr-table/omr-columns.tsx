@@ -7,6 +7,7 @@ import { DialogContext } from '@/providers/dialog-provider';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Omr, Status } from './omr.type';
+import { Checkbox } from '../ui/checkbox';
 
 //   roll: string
 //   marks: number
@@ -41,15 +42,29 @@ export const omrColumns: ColumnDef<Omr>[] = [
         },
     },
     {
+        accessorKey: 'isRechecked',
+        header: 'Is Rechecked?',
+        cell: ({ row }) => {
+            return (
+                <div className="flex items-center justify-center">
+                    <Checkbox
+                        className="rounded-full border-[var(--mkp-primary)] data-[state=checked]:bg-[#00c950] data-[state=checked]:border-[#00c950] disabled"
+                        checked={row.getValue('isRechecked')}
+                    />
+                </div>
+            );
+        },
+    },
+    {
         accessorKey: 'action',
         header: 'Action',
         cell: () => {
-            return <ActionButton label="View" />;
+            return <ViewButton label="View" />;
         },
     },
 ];
 
-export const ActionButton = ({ label }: { label: string }) => {
+export const ViewButton = ({ label }: { label: string }) => {
     const { setOpen } = useContext(DialogContext);
 
     return (

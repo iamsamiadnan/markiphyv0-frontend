@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Courier_Prime } from 'next/font/google';
 import './globals.css';
+import { DialogProvider } from '@/providers/dialog-provider';
 
 const geistSans = Courier_Prime({
     variable: '--font-geist-sans',
@@ -31,7 +32,7 @@ export default function RootLayout({
             >
                 <main className="px-4">
                     <section className="max-w-[1440px] mx-auto">
-                        {children}
+                        <DialogProvider>{children}</DialogProvider>
                     </section>
                 </main>
             </body>

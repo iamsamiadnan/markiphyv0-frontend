@@ -57,7 +57,7 @@ export function DataTable<TData, TValue>({
         <>
             <Table>
                 <TableHeader>
-                    <TableRow>
+                    <TableRow className="hover:bg-transparent">
                         <TableHead className="px-0" colSpan={5}>
                             <div className="flex gap-6 justify-between pb-4">
                                 <Input
@@ -72,7 +72,7 @@ export function DataTable<TData, TValue>({
                                             .getColumn('roll')
                                             ?.setFilterValue(event.target.value)
                                     }
-                                    className="rounded-none border-[var(--mkp-primary)] w-[200px]"
+                                    className="rounded-none border-[var(--mkp-primary)] w-[200px] bg-white"
                                 />
 
                                 <div className="flex items-center">
@@ -102,9 +102,12 @@ export function DataTable<TData, TValue>({
             </Table>
             <div className="h-[400px] overflow-y-scroll border border-[var(--mkp-primary)]">
                 <Table>
-                    <TableHeader className="sticky top-0 bg-[var(--mkp-background)] drop-shadow-xs">
+                    <TableHeader className="sticky top-0 bg-[var(--mkp-background)] drop-shadow-xs z-[1] ">
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
+                            <TableRow
+                                key={headerGroup.id}
+                                className="hover:bg-transparent"
+                            >
                                 {headerGroup.headers.map((header) => {
                                     return (
                                         <TableHead key={header.id}>
@@ -125,6 +128,7 @@ export function DataTable<TData, TValue>({
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
+                                    className="hover:bg-[var(--mkp-primary)]/5"
                                     key={row.id}
                                     data-state={
                                         row.getIsSelected() && 'selected'

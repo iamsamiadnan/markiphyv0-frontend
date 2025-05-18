@@ -12,7 +12,7 @@ import {
 export default function SelectInput({ selectValue }: { selectValue: string }) {
     return (
         <Select>
-            <SelectTrigger className="w-full rounded-none border-[var(--mkp-primary)] ">
+            <SelectTrigger className="w-full rounded-none border-[var(--mkp-primary)] bg-white">
                 <SelectValue placeholder={selectValue} />
             </SelectTrigger>
             <SelectContent>

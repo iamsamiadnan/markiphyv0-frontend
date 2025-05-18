@@ -7,10 +7,12 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
 import LogTable from '@/components/omr-table/log-table';
+import { OmrViewDialog } from '@/components/omr-view-dialog';
 
 export default function QuickAction() {
     return (
         <>
+            <OmrViewDialog />
             <div className="flex gap-5 mb-5">
                 <fieldset className="flex-1">
                     <Label

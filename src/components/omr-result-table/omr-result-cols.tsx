@@ -6,7 +6,7 @@ import { useContext } from 'react';
 import { DialogContext } from '@/providers/dialog-provider';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { Omr, Status } from './omr.type';
+import { Omr, Status } from './omr-result.type';
 import { Checkbox } from '../ui/checkbox';
 
 //   roll: string
@@ -22,7 +22,7 @@ export const omrColumns: ColumnDef<Omr>[] = [
     },
 
     {
-        accessorKey: 'imageUrl',
+        accessorKey: 'imageName',
         header: 'Omr Sheet',
     },
     {

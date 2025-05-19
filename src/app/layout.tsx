@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Courier_Prime } from 'next/font/google';
 import './globals.css';
 import { DialogProvider } from '@/providers/dialog-provider';
+import { Toaster } from 'react-hot-toast';
+import { DataProvider } from '@/providers/data-provider';
 
 const geistSans = Courier_Prime({
     variable: '--font-geist-sans',
@@ -30,9 +32,12 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
+                <Toaster />
                 <main className="px-4">
                     <section className="max-w-[1440px] mx-auto">
-                        <DialogProvider>{children}</DialogProvider>
+                        <DataProvider>
+                            <DialogProvider>{children}</DialogProvider>
+                        </DataProvider>
                     </section>
                 </main>
             </body>

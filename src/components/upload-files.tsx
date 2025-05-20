@@ -6,6 +6,8 @@ import { Button } from './ui/button';
 import { saveJsonToFile } from '@/actions/file-io.action';
 import { DataContext } from '@/providers/data-provider';
 import { Omr } from './omr-result-table/omr-result.type';
+import { Progress } from './ui/progress';
+import { Table, TableBody, TableCell, TableRow } from './ui/table';
 
 export default function UploadFiles({
     label,
@@ -17,8 +19,13 @@ export default function UploadFiles({
     description: string;
 }) {
     const [files, setFiles] = useState<FileList | null>(null);
+    const [progress, setProgress] = useState(0);
+    const [succededCount, setSucceded] = useState(0);
+    const [failedCount, setFailed] = useState(0);
+
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const { setData } = useContext(DataContext);
+    const { data, setData } = useContext(DataContext);
+
     useEffect(() => {
         console.log(files);
     }, [files]);
@@ -62,8 +69,19 @@ export default function UploadFiles({
                     error: { status: boolean; message: string };
                 } = studentResp.data;
 
-                if (student.error.status)
-                    throw new Error(student.error.message);
+                if (
+                    student.error.status ||
+                    student.data.roll_number.includes('None')
+                ) {
+                    throw new Error(
+                        student.error.message === ''
+                            ? JSON.stringify({
+                                  filename: file.name,
+                                  roll_number: student.data.roll_number,
+                              })
+                            : student.error.message
+                    );
+                }
 
                 // console.log(`DEBUG: `, student.data.roll_number);
                 const omrResp = await axios.post(
@@ -96,14 +114,6 @@ export default function UploadFiles({
 
                 saveJsonToFile(payload, `_${student.data.roll_number}.json`);
 
-                const data: Omr = {
-                    roll: roll_number,
-                    imageName: file.name,
-                    marks: 0,
-                    status: 'DONE',
-                    isRechecked: false,
-                };
-                // setData((prev) => [...prev, data]);
                 setData((prev) =>
                     prev.map((datum) => {
                         if (datum.imageName === file.name) {
@@ -117,8 +127,25 @@ export default function UploadFiles({
                         return datum;
                     })
                 );
+
+                setSucceded((prev) => prev + 1);
+                setProgress((prev) => prev + 1);
             } catch (error) {
                 console.error(error);
+                setData((prev) =>
+                    prev.map((datum) => {
+                        if (datum.imageName === file.name) {
+                            return {
+                                ...datum,
+                                status: 'FAILED',
+                                roll: '-------',
+                            };
+                        }
+
+                        return datum;
+                    })
+                );
+                setFailed((prev) => prev + 1);
             }
         }
     };
@@ -142,7 +169,9 @@ export default function UploadFiles({
                         className="mb-3.5"
                     />
                     <span className="block text-sm text-[var(--mkp-text-accent)] underline">
-                        {files ? `Total Images: ${files?.length}` : description}
+                        {files
+                            ? `Total OMR Sheets: ${files?.length}`
+                            : description}
                     </span>
                 </div>
                 <input
@@ -161,6 +190,62 @@ export default function UploadFiles({
             >
                 Confirm
             </Button>
+
+            {/* (currentStep / totalSteps) * 100 */}
+
+            {files && (
+                <>
+                    <Progress
+                        className="rounded-none mt-6"
+                        value={
+                            ((succededCount + failedCount) / files?.length) *
+                            100
+                        }
+                        indicatorColor="bg-[#00c950]"
+                    />
+                </>
+            )}
+
+            {/* <div className="border border-[var(--mkp-primary)] flex justify-between h-12 items-center shadow-[-4px_4px_0_var(--mkp-primary)] px-6">
+                <div className="flex gap-1">
+                    Total OMR Sheets:
+                    <div className="text-[var(--mkp-text-secondary)]">
+                        {files ? files?.length : 0}
+                    </div>
+                </div>
+                <div className="flex gap-1">
+                    Succeed:
+                    <div className="text-[#00c950]">{data?.length}</div>
+                </div>
+                <div className="flex gap-1">
+                    Failed: <div className="text-red-500">0</div>
+                </div>
+            </div> */}
+
+            <Table className="mt-6 border border-[var(--mkp-primary)] shadow-[-4px_4px_0_var(--mkp-primary)] h-12 ">
+                <TableBody>
+                    <TableRow>
+                        <TableCell>
+                            Total Sheets:
+                            <span className="text-[var(--mkp-primary)] ml-1">
+                                {files ? files?.length : 0}
+                            </span>
+                        </TableCell>
+                        <TableCell>
+                            Succeded:
+                            <span className="text-[#00c950] ml-1">
+                                {succededCount}
+                            </span>
+                        </TableCell>
+                        <TableCell>
+                            Failed:
+                            <span className="text-red-500 ml-1">
+                                {failedCount}
+                            </span>
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
         </>
     );
 }

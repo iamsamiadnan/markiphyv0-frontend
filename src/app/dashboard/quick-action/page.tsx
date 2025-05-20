@@ -39,7 +39,7 @@ export default function QuickAction() {
             />
 
             <br />
-            <br />
+
             <OmrResultTable />
         </>
     );

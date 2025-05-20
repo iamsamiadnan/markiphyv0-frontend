@@ -22,6 +22,7 @@ import { Button } from './button';
 import { Input } from './input';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
+import { Progress } from './progress';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -100,6 +101,7 @@ export function DataTable<TData, TValue>({
                     </TableRow>
                 </TableHeader>
             </Table>
+
             <div className="h-[400px] overflow-y-scroll border border-[var(--mkp-primary)]">
                 <Table>
                     <TableHeader className="sticky top-0 bg-[var(--mkp-background)] drop-shadow-xs z-[1] ">

@@ -18,7 +18,9 @@ export default function UploadFiles({
     src: string;
     description: string;
 }) {
-    const [files, setFiles] = useState<FileList | null>(null);
+    // const [files, setFiles] = useState<FileList | null>(null);
+
+    const { files, setFiles } = useContext(DataContext);
     const [progress, setProgress] = useState(0);
     const [succededCount, setSucceded] = useState(0);
     const [failedCount, setFailed] = useState(0);

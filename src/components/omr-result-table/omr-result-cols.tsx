@@ -8,6 +8,8 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Omr, Status } from './omr-result.type';
 import { Checkbox } from '../ui/checkbox';
+import { readJsonFromFile } from '@/actions/file-io.action';
+import { DataContext } from '@/providers/data-provider';
 
 //   roll: string
 //   marks: number
@@ -58,19 +60,34 @@ export const omrColumns: ColumnDef<Omr>[] = [
     {
         accessorKey: 'action',
         header: 'Action',
-        cell: () => {
-            return <ViewButton label="View" />;
+        cell: ({ row }) => {
+            return <ViewButton roll={row.getValue('roll')} label="View" />;
         },
     },
 ];
 
-export const ViewButton = ({ label }: { label: string }) => {
+export const ViewButton = ({
+    label,
+    roll,
+}: {
+    label: string;
+    roll: string;
+}) => {
     const { setOpen } = useContext(DialogContext);
+    const { setDetectedResult } = useContext(DataContext);
 
+    const handleOnView = async () => {
+        const filename = `_${roll}.json`;
+        const detectedResult = await readJsonFromFile(filename);
+        detectedResult.filename = filename;
+        console.log(detectedResult);
+        setDetectedResult(detectedResult);
+        setOpen(true);
+    };
     return (
         <Button
             className="rounded-none w-full bg-[var(--mkp-primary)] hover:bg-[var(--mkp-accent)]"
-            onClick={() => setOpen(true)}
+            onClick={handleOnView}
         >
             {label}
         </Button>

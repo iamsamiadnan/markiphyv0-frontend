@@ -12,7 +12,6 @@ import {
     FormLabel,
     FormMessage,
 } from './ui/form';
-import { Label } from './ui/label';
 import { Button } from './ui/button';
 import Link from 'next/link';
 

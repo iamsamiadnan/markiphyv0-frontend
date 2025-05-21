@@ -1,46 +1,43 @@
-import SelectInput from '@/components/SelectInput';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
+'use client';
 
 import { OmrViewDialog } from '@/components/omr-view-dialog';
 import OmrResultTable from '@/components/omr-result-table/omr-result-table';
-import UploadFiles from '@/components/upload-files';
+
+import OmrForm from '@/components/omr-form';
+import { useContext } from 'react';
+import { DataContext } from '@/providers/data-provider';
+import Stats from '@/components/stats';
+import { Progress } from '@/components/ui/progress';
 
 export default function QuickAction() {
+    const { data, stats, files } = useContext(DataContext);
+
     return (
         <>
             <OmrViewDialog />
-            <div className="flex gap-5 mb-5">
-                <fieldset className="flex-1">
-                    <Label
-                        htmlFor="select-course"
-                        className="text-[var(--mkp-text-primary)] mb-2"
-                    >
-                        Select Course
-                    </Label>
-                    <SelectInput selectValue="Select Course" />
-                </fieldset>
 
-                <fieldset className="flex-1">
-                    <Label
-                        htmlFor="select-course"
-                        className="text-[var(--mkp-text-primary)] mb-2"
-                    >
-                        Select Exam
-                    </Label>
-                    <SelectInput selectValue="Select Exam" />
-                </fieldset>
-            </div>
-
-            <UploadFiles
-                label="Upload OMR Sheets"
-                src="/upload-files.svg"
-                description="Click To Upload OMR Sheets"
-            />
-
+            {!data.length ? (
+                <OmrForm />
+            ) : (
+                <>
+                    <Stats />
+                    <br />
+                    {files && (
+                        <Progress
+                            className="rounded-none"
+                            value={
+                                ((stats.successCount + stats.failureCount) /
+                                    files?.length) *
+                                100
+                            }
+                            indicatorColor="bg-[#00c950]"
+                        />
+                    )}
+                    <br />
+                    <OmrResultTable />
+                </>
+            )}
             <br />
-
-            <OmrResultTable />
         </>
     );
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Courier_Prime } from 'next/font/google';
+import { Courier_Prime } from 'next/font/google';
 import './globals.css';
 import { DialogProvider } from '@/providers/dialog-provider';
 import { Toaster } from 'react-hot-toast';

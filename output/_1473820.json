@@ -2,25 +2,25 @@
   "results": [
     {
       "answers": [
-        "c"
+        "d"
       ],
       "serial": 1
     },
     {
       "answers": [
-        "d"
+        "c"
       ],
       "serial": 2
     },
     {
       "answers": [
-        "b"
+        "c"
       ],
       "serial": 3
     },
     {
       "answers": [
-        "b"
+        "a"
       ],
       "serial": 4
     },
@@ -602,5 +602,6 @@
     }
   ],
   "status": true,
-  "imageName": "Image_014.jpg"
+  "imageName": "Image_014.jpg",
+  "isRechecked": true
 }

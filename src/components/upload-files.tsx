@@ -1,13 +1,11 @@
 'use client';
 import Image from 'next/image';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef } from 'react';
 import axios from 'axios';
-import { Button } from './ui/button';
 import { saveJsonToFile } from '@/actions/file-io.action';
 import { DataContext } from '@/providers/data-provider';
 import { Omr } from './omr-result-table/omr-result.type';
-import { Progress } from './ui/progress';
-import { Table, TableBody, TableCell, TableRow } from './ui/table';
+import ConfirmDialog from './confirm-dialog';
 
 export default function UploadFiles({
     label,
@@ -20,17 +18,10 @@ export default function UploadFiles({
 }) {
     // const [files, setFiles] = useState<FileList | null>(null);
 
-    const { files, setFiles } = useContext(DataContext);
-    const [progress, setProgress] = useState(0);
-    const [succededCount, setSucceded] = useState(0);
-    const [failedCount, setFailed] = useState(0);
+    const { files, setFiles, setStats } = useContext(DataContext);
 
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const { data, setData } = useContext(DataContext);
-
-    useEffect(() => {
-        console.log(files);
-    }, [files]);
+    const { setData } = useContext(DataContext);
 
     const handleOnConfirm = async () => {
         if (!files) return;
@@ -130,8 +121,10 @@ export default function UploadFiles({
                     })
                 );
 
-                setSucceded((prev) => prev + 1);
-                setProgress((prev) => prev + 1);
+                setStats((prev) => ({
+                    ...prev,
+                    successCount: prev.successCount + 1,
+                }));
             } catch (error) {
                 console.error(error);
                 setData((prev) =>
@@ -147,7 +140,11 @@ export default function UploadFiles({
                         return datum;
                     })
                 );
-                setFailed((prev) => prev + 1);
+
+                setStats((prev) => ({
+                    ...prev,
+                    failureCount: prev.failureCount + 1,
+                }));
             }
         }
     };
@@ -185,69 +182,16 @@ export default function UploadFiles({
                     ref={fileInputRef}
                 />
             </div>
-            <Button
+
+            {/* <Button
                 type="submit"
                 className="rounded-none bg-[var(--mkp-primary)] hover:bg-[var(--mkp-accent)] w-full"
                 onClick={handleOnConfirm}
             >
                 Confirm
-            </Button>
+            </Button> */}
 
-            {/* (currentStep / totalSteps) * 100 */}
-
-            {files && (
-                <>
-                    <Progress
-                        className="rounded-none mt-6"
-                        value={
-                            ((succededCount + failedCount) / files?.length) *
-                            100
-                        }
-                        indicatorColor="bg-[#00c950]"
-                    />
-                </>
-            )}
-
-            {/* <div className="border border-[var(--mkp-primary)] flex justify-between h-12 items-center shadow-[-4px_4px_0_var(--mkp-primary)] px-6">
-                <div className="flex gap-1">
-                    Total OMR Sheets:
-                    <div className="text-[var(--mkp-text-secondary)]">
-                        {files ? files?.length : 0}
-                    </div>
-                </div>
-                <div className="flex gap-1">
-                    Succeed:
-                    <div className="text-[#00c950]">{data?.length}</div>
-                </div>
-                <div className="flex gap-1">
-                    Failed: <div className="text-red-500">0</div>
-                </div>
-            </div> */}
-
-            <Table className="mt-6 border border-[var(--mkp-primary)] shadow-[-4px_4px_0_var(--mkp-primary)] h-12 ">
-                <TableBody>
-                    <TableRow>
-                        <TableCell>
-                            Total Sheets:
-                            <span className="text-[var(--mkp-primary)] ml-1">
-                                {files ? files?.length : 0}
-                            </span>
-                        </TableCell>
-                        <TableCell>
-                            Succeded:
-                            <span className="text-[#00c950] ml-1">
-                                {succededCount}
-                            </span>
-                        </TableCell>
-                        <TableCell>
-                            Failed:
-                            <span className="text-red-500 ml-1">
-                                {failedCount}
-                            </span>
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
+            <ConfirmDialog handleOnConfirm={handleOnConfirm} />
         </>
     );
 }

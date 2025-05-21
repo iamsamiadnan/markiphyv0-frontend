@@ -74,20 +74,25 @@ export const ViewButton = ({
     roll: string;
 }) => {
     const { setOpen } = useContext(DialogContext);
-    const { setDetectedResult } = useContext(DataContext);
+    const { setDetectedResult, data } = useContext(DataContext);
+    const filename = `_${roll}.json`;
 
     const handleOnView = async () => {
-        const filename = `_${roll}.json`;
         const detectedResult = await readJsonFromFile(filename);
         detectedResult.filename = filename;
-        console.log(detectedResult);
+        console.log(`DETECTED RESULT: `, detectedResult);
         setDetectedResult(detectedResult);
         setOpen(true);
     };
+
+    console.log(data);
     return (
         <Button
             className="rounded-none w-full bg-[var(--mkp-primary)] hover:bg-[var(--mkp-accent)]"
             onClick={handleOnView}
+            disabled={
+                !(data.find((datum) => datum.roll === roll)?.status === 'DONE')
+            }
         >
             {label}
         </Button>

@@ -5,28 +5,26 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { DataContext } from '@/providers/data-provider';
-import { DialogContext, DialogContextType } from '@/providers/dialog-provider';
-import Image from 'next/image';
+import { DialogContext } from '@/providers/dialog-provider';
 import { useContext, useEffect, useMemo, useState } from 'react';
 
 export function OmrViewDialog() {
     const { open, setOpen } = useContext(DialogContext);
     const { detectedResult, files, setData } = useContext(DataContext);
     const [previewUrl, setPreviewUrl] = useState('');
-    // const [renderedResult, setRenderedResult] = useState();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [editedAnswers, setEditedAnswers] = useState<any>([]);
 
     const getImageUrl = (filename: string) => {
         if (!files) return '';
-        const imageFile = Array.from(files).find(
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const imageFile: any = Array.from(files).find(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (file: any) => file.name === filename
         );
         const url = URL.createObjectURL(imageFile);
@@ -35,6 +33,7 @@ export function OmrViewDialog() {
     };
 
     const handleAnswerClick = (serial: number, answer: string) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setEditedAnswers((prev: any[]) => {
             const exists = prev.some((item) => item.serial === serial);
 
@@ -145,7 +144,8 @@ export function OmrViewDialog() {
             ) => {
                 const answers = result.answers.map((str) => str.toUpperCase());
                 const edited = editedAnswers.find(
-                    (item) => item.serial === result.serial
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    (item: any) => item.serial === result.serial
                 );
                 const selectedAnswer = edited?.answers?.[0]?.toUpperCase();
 
